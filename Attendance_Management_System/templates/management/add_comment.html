@@ -1,0 +1,64 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}添加表彰信息{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'add_comment' %}" class="list-group-item">
+                            添加表彰信息
+                        </a>
+                        <a href="{% url 'modify_comment' %}" class="list-group-item">
+                            修改表彰信息
+                        </a>
+                        <a href="{% url 'delete_comment' %}" class="list-group-item">
+                            删除表彰信息
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7 col-md-offset-1">
+                    {% if state == 'empty' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">信息不能为空！</h2>
+                    </div>
+                    {% elif state == 'success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">添加成功！</h2>
+                    </div>
+                    {% endif %}
+                    <form method="POST" role="form" class="form-horizontal">
+                        {% csrf_token %}
+                        <h1 class="form-signin-heading text-center">请添加表彰信息</h1>
+
+                        <div class="form-group">
+                            <label for="id_user_name" class="col-md-3 control-label">标题：</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="id_user_name" required name="title"
+                                       autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_details" class="col-md-3 control-label">内容：</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" required name="details" id="id_details"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit">添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

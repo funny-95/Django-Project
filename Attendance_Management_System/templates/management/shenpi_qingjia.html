@@ -1,0 +1,96 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}审批请假{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-1a">
+                <form method="post" role="form" class="form-horizontal">
+                    {% csrf_token %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <td style="font-size:30px" colspan="9" class="text-center">请假申请审批表</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">申请人</th>
+                            <th class="text-center">工号</th>
+                            <th class="text-center">申请日期</th>
+                            <th class="text-center">起</th>
+                            <th class="text-center">止</th>
+                            <th class="text-center">原因</th>
+                            <th class="text-center">审批结果</th>
+                            <th class="text-center">###</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for file in qingjia_list %}
+                            <tr>
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                {% for person in person_list %}
+                                {% if file.gonghao == person.gonghao %}
+                                <td class="text-center">{{ person.username}}</td>
+                                {% endif %}
+                                {% endfor %}
+                                <td class="text-center">{{ file.gonghao}}</td>
+                                <td class="text-center">{{ file.now_date}}</td>
+                                <td class="text-center">{{ file.from_date}}</td>
+                                <td class="text-center">{{ file.to_date}}</td>
+                                <td class="text-center">{{ file.cause}}</td>
+                                <td class="col-sm-1 text-center">
+                                    <select name="result" style="height:30px;">
+                                        <option>{{ file.approve_result }}</option>
+                                        {% if file.approve_result == '待审批' %}
+                                        <option>通过</option>
+                                        <option>驳回</option>
+                                        {% endif %}
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    {% if file.approve_result == '待审批' %}
+                                    <button class="btn btn-info" type="submit" id="id_submit3" name="modify" value="{{ file.id }}" onclick="Button_Click()" >确定</button>
+                                    {% else %}
+                                    <button class="btn btn-info" disabled="disabled" type="submit" id="id_submit2" name="modify" value="{{ file.id }}" >已处理</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>暂无文件</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <script>
+                        $("#id_submit2").attr({"disabled":"disabled"});
+                    </script>
+                    <nav>
+                        <ul class="pager">
+                            {% if qingjia_list.has_previous %}
+                                <li class="previous"><a
+                                        href="?typ={{ query_category }}&page={{ qingjia_list.previous_page_number }}">上一页</a>
+                                </li>
+                            {% else %}
+                                <li class="previous disabled"><a href="#">上一页</a></li>
+                            {% endif %}
+                            第 {{ qingjia_list.number }} / {{ qingjia_list.paginator.num_pages }}页
+                            {% if qingjia_list.has_next %}
+                                <li class="next"><a
+                                        href="?typ={{ query_category }}&page={{ qingjia_list.next_page_number }}">下一页</a>
+                                </li>
+                            {% else %}
+                                <li class="next disabled"><a href="#">下一页</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

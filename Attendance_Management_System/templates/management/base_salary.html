@@ -1,0 +1,230 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}基本信息录入{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'base_salary' %}" class="list-group-item">
+                            基本工资录入
+                        </a>
+                        <a href="{% url 'salary_detail' %}" class="list-group-item">
+                            工资详情管理
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-8 col-md-offset-1" style="margin-top:10px">
+                    {% if state1 == 'empty' %}
+                        <div class="well">
+                            <h2 class="text-success text-center">信息不能为空！</h2>
+                        </div>
+                    {% elif state1 == 'success_modify' %}
+                        <div class="well">
+                            <h2 class="text-success text-center">修改成功！</h2>
+                        </div>
+                    {% endif %}
+                    {% if state == 'success' %}
+                        <div class="well">
+                            <h2 class="text-success text-center">注册成功！</h2>
+                        </div>
+                    {% elif state == 'empty' %}
+                        <div class="well">
+                            <h2 class="text-success text-center">信息不能为空！</h2>
+                        </div>
+                    {% endif %}
+                    <form method="POST" role="form" class="form-horizontal">
+                        {% csrf_token %}
+                        {% if state1 == None and state != 'add' %}
+                        <div class="form-group">
+                            <div class="col-md-2 col-md-offset-12">
+                                <button class="btn btn-link" type="submit" id="id_submit1" name="add">添加</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if state == 'add' %}
+                        <div class="form-group">
+                            <label for="depth" class="col-md-3 control-label">部门：</label>
+                            <div class="col-md-9">
+                                <select class="form-control" required name="depth" id="depth">
+                                    <option>人事部</option>
+                                    <option>行政部</option>
+                                    <option>市场部</option>
+                                    <option>数据部</option>
+                                    <option>数据应用部</option>
+                                    <option>研发一部</option>
+                                    <option>研发二部</option>
+                                    <option>其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="position" class="col-md-3 control-label">职位：</label>
+                            <div class="col-md-9">
+                                <select class="form-control" required name="position" id="position">
+                                    <option>职员</option>
+                                    <option>经理</option>
+                                    <option>实习生</option>
+                                    <option>副总经理</option>
+                                    <option>总经理</option>
+                                    <option>董事长</option>
+                                    <option>其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">基本工资：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="base_price" required name="base_price">
+                            </div>
+                            <label for="base_price" class="col-md-1 control-label text-center">元</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">加班：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required name="jiaban" value="{{p.jiaban}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">时/元</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">缺勤：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required name="queqing" value="{{p.queqing}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">时/元</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">请假：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required name="qingjia" value="{{p.qingjia}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">时/元</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 col-md-offset-5">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit" name="save">保存</button>
+                            </div>
+                        </div>
+                        {% elif state == 'modify' %}
+                        <input type="hidden" name="modify_id" value="{{p.id}}">
+                        <div class="form-group">
+                            <label for="depth" class="col-md-3 control-label">部门：</label>
+                            <div class="col-md-9">
+                                <select class="form-control" required name="depth" id="depth1">
+                                    <option>{{p.depth}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="position" class="col-md-3 control-label">职位：</label>
+                            <div class="col-md-9">
+                                <select class="form-control" required name="position" id="position1">
+                                    <option>{{p.position}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">基本工资：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="base_price1" required name="change_price" value="{{p.base_salary}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">元</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">加班：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required name="jiaban" value="{{p.jiaban}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">时/元</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">缺勤：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required name="queqing" value="{{p.queqing}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">时/元</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price" class="col-md-3 control-label">请假：</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required name="qingjia" value="{{p.qingjia}}">
+                            </div>
+                            <label for="base_price" class="col-md-2 control-label text-center" style="margin-left:-30px">时/元</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4 col-md-offset-5">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit3" name="modify_save">保存</button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <table class="table table-hover" style="margin-left:-30px;width:700px">
+                            <thead>
+                            <tr>
+                                <th colspan="7" class="text-center" style="font-size:25px">基本工资表</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">部门</th>
+                                <th class="text-center">职位</th>
+                                <th class="text-center">基本工资（元）</th>
+                                <th class="text-center">加班（时/元）</th>
+                                <th class="text-center">缺勤（时/元）</th>
+                                <th class="text-center">请假（时/元）</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for salary in base_salary %}
+                                <tr>
+                                    <td class="text-center"><input type="radio" name="select_id1" value="{{salary.id}}"></td>
+                                    <td class="text-center">{{ salary.depth}}</td>
+                                    <td class="text-center">{{ salary.position}}</td>
+                                    <td class="text-center">{{ salary.base_salary}}</td>
+                                    <td class="text-center">{{ salary.jiaban}}</td>
+                                    <td class="text-center">{{ salary.queqing}}</td>
+                                    <td class="text-center">{{ salary.qingjia}}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td>暂无文件</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <nav>
+                            <ul class="pager">
+                                {% if salary_list.has_previous %}
+                                    <li class="previous"><a
+                                            href="?typ={{ query_category }}&page={{ salary_list.previous_page_number }}">上一页</a>
+                                    </li>
+                                {% else %}
+                                    <li class="previous disabled"><a href="#">上一页</a></li>
+                                {% endif %}
+                                第 {{ salary_list.number }} / {{ salary_list.paginator.num_pages }}页
+                                {% if salary_list.has_next %}
+                                    <li class="next"><a
+                                            href="?typ={{ query_category }}&page={{ salary_list.next_page_number }}">下一页</a>
+                                    </li>
+                                {% else %}
+                                    <li class="next disabled"><a href="#">下一页</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        <div class="form-group">
+                            <div class="col-md-2 col-md-offset-5">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit2" name="modify">修改</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}工资管理{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'base_salary' %}" class="list-group-item">
+                            基本工资录入
+                        </a>
+                        <a href="{% url 'salary_detail' %}" class="list-group-item">
+                            工资详情管理
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-9 col-md-offset-1">
+                    <h1 class="text-center">欢迎进入工资管理！</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

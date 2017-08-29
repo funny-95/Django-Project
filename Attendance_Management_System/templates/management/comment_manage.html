@@ -1,0 +1,34 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}表彰管理{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'add_comment' %}" class="list-group-item">
+                            添加表彰信息
+                        </a>
+                        <a href="{% url 'modify_comment' %}" class="list-group-item">
+                            修改表彰信息
+                        </a>
+                        <a href="{% url 'delete_comment' %}" class="list-group-item">
+                            删除表彰信息
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-9 col-md-offset-1">
+                    <h1 class="text-center">欢迎进入表彰管理！</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}修改表彰信息{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'add_comment' %}" class="list-group-item">
+                            添加表彰信息
+                        </a>
+                        <a href="{% url 'modify_comment' %}" class="list-group-item">
+                            修改表彰信息
+                        </a>
+                        <a href="{% url 'delete_comment' %}" class="list-group-item">
+                            删除表彰信息
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7 col-md-offset-1">
+                    {% if state == 'empty' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">信息不能为空！</h2>
+                    </div>
+                    {% elif state == 'success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">修改成功！</h2>
+                    </div>
+                    {% elif state == 'delete_success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">删除成功！</h2>
+                    </div>
+                    {% endif %}
+                    <form method="POST" role="form" class="form-horizontal">
+                        {% csrf_token %}
+                        {% if need == 'modify' %}
+                        <h1 class="form-signin-heading text-center">请修改</h1>
+                        <input type="hidden" value="{{file.id}}" name="file_need_id">
+                        <div class="form-group">
+                            <label for="id_user_name" class="col-md-3 control-label">标题：</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="id_user_name" required name="title"
+                                       value="{{file.title}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_details" class="col-md-3 control-label">内容：</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" required name="details" id="id_details">{{file.details}}</textarea>
+                            </div>
+                        </div>
+                        {% elif state != 'show' %}
+                        <div class="col-md-4 col-md-offset-9">
+                            {% csrf_token %}
+                            <input type="search" class="form-control" name="keyword"
+                                   placeholder="Enter keywords to search" id="id_search_input"
+                                   autofocus>
+                            <button class="btn btn btn-primary btn-block" style="float:left;margin-top:10px;" type="submit" id="id_submit3" name="search">搜索</button>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="font-size:25px" colspan="4">表彰信息列表</th>
+                            </tr>
+                            <tr>
+                                <th>请选择</th>
+                                <th>#</th>
+                                <th>标题</th>
+                                <th>发布时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for file in file_list %}
+                                <tr>
+                                    <td><input type="radio" name="check_radio" value="{{file.id}}"></td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ file.title }}</td>
+                                    <td>{{ file.public_time}}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td>暂无文件</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <nav>
+                            <ul class="pager">
+                                {% if file_list.has_previous %}
+                                    <li class="previous"><a
+                                            href="?typ={{ query_category }}&page={{ file_list.previous_page_number }}">上一页</a>
+                                    </li>
+                                {% else %}
+                                    <li class="previous disabled"><a href="#">上一页</a></li>
+                                {% endif %}
+                                第 {{ file_list.number }} / {{ file_list.paginator.num_pages }}页
+                                {% if file_list.has_next %}
+                                    <li class="next"><a
+                                            href="?typ={{ query_category }}&page={{ file_list.next_page_number }}">下一页</a>
+                                    </li>
+                                {% else %}
+                                    <li class="next disabled"><a href="#">下一页</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        {% if state == 'show' %}
+                        <h2 class="text-center">{{ file.title }}</h2>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">标题：</label>
+                            <div class="col-md-9">
+                                <p>{{ file.title }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">发布时间：</label>
+                            <div class="col-md-9">
+                                <p>{{ file.public_time|date:"Y-m-d" }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">内容：</label>
+                            <div class="col-md-9">
+                                <p>{{ file.details }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if need != 'modify' and state != 'show' %}
+                        <div class="form-group">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit1" name="change">修改</button>
+                                 <button class="btn btn btn-primary btn-block" type="submit" id="id_submit4" name="select">查询</button>
+                            </div>
+                        </div>
+                        {% elif state != 'show' %}
+                        <div class="form-group">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit2" name="save">保存</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

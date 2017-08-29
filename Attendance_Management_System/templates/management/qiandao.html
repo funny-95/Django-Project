@@ -1,0 +1,69 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}签到{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <script type="text/javascript">
+            function startTime()
+            {
+            var today=new Date()
+            var h=today.getHours()
+            var m=today.getMinutes()
+            var s=today.getSeconds()
+            t=today.toLocaleDateString()
+            m=checkTime(m)
+            s=checkTime(s)
+            document.getElementById('txt').innerHTML=t+'  '+h+":"+m+":"+s
+            t=setTimeout('startTime()',500)
+            }
+
+            function checkTime(i)
+            {
+            if (i<10)
+              {i="0" + i}
+              return i
+            }
+        </script>
+        <body onload="startTime()">
+        </body>
+        <div class="row" onload="startTime()">
+            <div class="col-md-10 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                {% if state == 'shang_qiandao' %}
+                    <div class="col-md-10">
+                        <h2 class="text-success" style="margin-left:160px">上班打卡成功！</h2>
+                    </div>
+                {% elif state == 'xia_qiandao' %}
+                    <div class="col-md-10">
+                        <h2 class="text-success" style="margin-left:160px">下班打卡成功！</h2>
+                    </div>
+                {% elif state == 'qiandao_over' %}
+                    <div class="col-md-10">
+                        <h2 class="text-success" style="margin-left:160px">今日签到已成功！</h2>
+                    </div>
+                {% elif state == 'qiandao_error' %}
+                    <div class="col-md-10">
+                        <h2 class="text-success" style="margin-left:160px">该员工不存在！</h2>
+                    </div>
+                {% endif %}
+                <form method="POST" role="form" class="form-horizontal text-center">
+                    {% csrf_token %}
+                    <div class="form-group text-center col-md-8">
+                        <label class="col-md-5 control-label">现在系统时间:</label>
+                        <div class="col-md-4">
+                            <p class="form-control col-md-6" id="txt">
+                                {{qiandao_time}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-8 text-center">
+                        <button class="btn btn btn-primary btn-block" style="margin-top:55px" type="submit">打卡</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

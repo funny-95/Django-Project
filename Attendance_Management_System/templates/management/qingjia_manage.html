@@ -1,0 +1,28 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}请假管理{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1a">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'shenpi_qingjia' %}" class="list-group-item">
+                            审批请假信息
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-9 col-md-offset-1">
+                    <h1 class="text-center">欢迎进入请假管理！</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

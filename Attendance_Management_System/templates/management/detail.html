@@ -1,0 +1,46 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}查看文件{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-10 col-md-offset-1">
+                    <form method="post">
+                        {% csrf_token %}
+                        <h2 class="text-center">{{ file.title }}</h2>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">标题：</label>
+                            <div class="col-md-9">
+                                <p>{{ file.title }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">发布时间：</label>
+                            <div class="col-md-9">
+                                <p>{{ file.public_time|date:"Y-m-d" }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">内容：</label>
+                            <div class="col-md-9">
+                                <p>{{ file.details }}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="col-md-4 col-md-offset-4">
+                            <button class="btn btn btn-primary btn-block" style="margin-top:55px" type="submit">返回</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

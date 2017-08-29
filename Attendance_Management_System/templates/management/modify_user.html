@@ -1,0 +1,177 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}修改员工{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'add_user' %}" class="list-group-item">
+                            添加员工
+                        </a>
+                        <a href="{% url 'modify_user' %}" class="list-group-item">
+                            查改员工
+                        </a>
+                        <a href="{% url 'delete_user' %}" class="list-group-item">
+                            删除员工
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-9 col-md-offset-1">
+                    {% if state == 'empty' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">信息不能为空！</h2>
+                    </div>
+                    {% elif state == 'success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">修改成功！</h2>
+                    </div>
+                    {% elif state == 'quanxian_success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">权限修改成功！</h2>
+                    </div>
+                    {% elif state == 'too_many' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">请选择一个员工修改信息！</h2>
+                    </div>
+                    {% elif state == 'youself' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">不可修改本人权限！</h2>
+                    </div>
+                    {% endif %}
+                    <form method="POST" role="form" class="form-horizontal">
+                        {% csrf_token %}
+                        {% if change_infomation == 'change_infomation' %}
+                            <h1 class="form-signin-heading text-center">请修改</h1>
+                            <input type="hidden" value="{{renyuan_old.gonghao}}" name="renyuan_need_gonghao">
+                            <div class="form-group">
+                                <label for="id_user_name" class="col-md-3 control-label">用户名：</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_user_name" required name="username"
+                                           value="{{renyuan.username}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_user_gonghao" class="col-md-3 control-label">工号：</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="id_user_gonghao" required name="gonghao" value="{{renyuan.gonghao}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_depth" class="col-md-3 control-label">部门：</label>
+                                <div class="col-md-9">
+                                    <select type="text" class="form-control" required name="depth" id="id_depth">
+                                        <option>{{renyuan.depth}}</option>
+                                        <option>人事部</option>
+                                        <option>行政部</option>
+                                        <option>市场部</option>
+                                        <option>数据部</option>
+                                        <option>数据应用部</option>
+                                        <option>研发一部</option>
+                                        <option>研发二部</option>
+                                        <option>其他</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_position" class="col-md-3 control-label">职位：</label>
+                                <div class="col-md-9">
+                                    <select type="text" class="form-control" required name="position" id="id_position">
+                                        <option>{{renyuan.position}}</option>
+                                        <option>职员</option>
+                                        <option>经理</option>
+                                        <option>实习生</option>
+                                        <option>副总经理</option>
+                                        <option>总经理</option>
+                                        <option>董事长</option>
+                                        <option>其他</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_passwd" class="col-md-3 control-label">密码：</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" required name="password" id="id_passwd" value="{{renyuan.password}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_email" class="col-md-3 control-label">电子邮件：</label>
+                                <div class="col-md-9">
+                                    <input type="email" class="form-control" required name="email" id="id_email" value="{{renyuan.email}}">
+                                </div>
+                            </div>
+                        {% else %}
+                            <table class="table table-striped table-hover ">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>员工基本信息表</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>选择</td>
+                                    <td class="text-center">姓名</td>
+                                    <td class="text-center">工号</td>
+                                    <td class="text-center">部门</td>
+                                    <td class="text-center">职位</td>
+                                    <td class="text-center">电子邮箱</td>
+                                    <td class="text-center">是否具有管理员权限</td>
+                                </tr>
+                                {% for renyuan in renyuan_list %}
+                                {% if renyuan.username != 'admin' %}
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="check_box_list" value="{{renyuan.gonghao}}">
+                                    </td>
+                                    <td class="text-center">{{renyuan.username}}</td>
+                                    <td class="text-center">{{renyuan.gonghao}}</td>
+                                    <td class="text-center">{{renyuan.depth}}</td>
+                                    <td class="text-center">{{renyuan.position}}</td>
+                                    <td class="text-center">{{renyuan.email}}</td>
+                                    <td class="text-center">
+                                        {% if renyuan.permission %}
+                                            是
+                                        {% else %}
+                                            否
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </table>
+                        {% endif %}
+                        <div class="form-group">
+                            <div class="col-md-3 col-md-offset-5">
+                                {% if need != 'need' %}
+                                    <button class="btn btn-primary btn-block" type="submit" id="id_submit1" name="modify">修改信息</button>
+                                {% endif %}
+                                {% if change_infomation != 'change_infomation' and user.myuser.username == 'admin' %}
+                                    <button class="btn btn-primary btn-block" type="submit" id="id_submit2" name="quanxian">修改权限</button>
+                                {% elif need == 'need' %}
+                                    <button class="btn btn-primary btn-block" type="submit" id="id_submit3" name="save">保存</button>
+                                {% endif %}
+                                <!--<button class="btn btn-primary btn-block" type="submit" id="id_submit2" name="select">查询</button>-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

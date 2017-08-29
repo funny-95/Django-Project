@@ -1,0 +1,34 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}员工管理{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'add_user' %}" class="list-group-item">
+                            添加用户
+                        </a>
+                        <a href="{% url 'modify_user' %}" class="list-group-item">
+                            查改用户
+                        </a>
+                        <a href="{% url 'delete_user' %}" class="list-group-item">
+                            删除用户
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-9 col-md-offset-1">
+                    <h1 class="text-center">欢迎进入员工管理！</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

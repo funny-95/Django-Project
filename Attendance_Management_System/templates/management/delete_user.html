@@ -1,0 +1,88 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}修改用户{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a href="{% url 'add_user' %}" class="list-group-item">
+                            添加用户
+                        </a>
+                        <a href="{% url 'modify_user' %}" class="list-group-item">
+                            查改用户
+                        </a>
+                        <a href="{% url 'delete_user' %}" class="list-group-item">
+                            删除用户
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $('#id_category_{{ query_category }}').addClass("active");
+                    </script>
+                </div>
+                <div class="col-md-9 col-md-offset-1">
+                    {% if state == 'success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">删除成功！</h2>
+                    </div>
+                    {% elif state == 'error' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">未选择！</h2>
+                    </div>
+                    {% elif state == 'admin_error' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">最高权限管理员不可删除！</h2>
+                    </div>
+                    {% endif %}
+                    <form method="POST" role="form" class="form-horizontal">
+                        {% csrf_token %}
+                        <table class="table table-striped table-hover ">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>员工基本信息表</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>选择</td>
+                                <td class="text-center">姓名</td>
+                                <td class="text-center">工号</td>
+                                <td class="text-center">部门</td>
+                                <td class="text-center">职位</td>
+                                <td class="text-center">电子邮箱</td>
+                            </tr>
+                            {% for renyuan in renyuan_list %}
+                            {% if renyuan.username != 'admin' %}
+                            <tr>
+                                <td class="text-center">
+                                    <input type="checkbox" name="check_box_list" value="{{renyuan.gonghao}}">
+                                </td>
+                                <td class="text-center">{{renyuan.username}}</td>
+                                <td class="text-center">{{renyuan.gonghao}}</td>
+                                <td class="text-center">{{renyuan.depth}}</td>
+                                <td class="text-center">{{renyuan.position}}</td>
+                                <td class="text-center">{{renyuan.email}}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </table>
+
+                        <div class="form-group">
+                            <div class="col-md-2 col-md-offset-5" style="margin-left:250px">
+                                <button class="btn btn btn-primary btn-block" type="submit" id="id_submit1" name="delete">删除</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
